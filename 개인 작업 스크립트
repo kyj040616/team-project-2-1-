@@ -1,0 +1,35 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class DoorTrigger : MonoBehaviour
+{
+    public Door connectedDoor; // 연결된 문 오브젝트
+    public float speed = 2f; // 문이 움직이는 속도
+
+    private int collidingCount = 0; // 현재 접촉하고 있는 콜라이더의 수
+    private Vector3 initialPosition;
+
+    void Start()
+    {
+        initialPosition = transform.position; // 시작 시 초기 위치를 현재 위치로 설정
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (collidingCount == 0) // 첫 번째 콜라이더가 접촉했을 때만 문을 엽니다.
+        {
+            connectedDoor.OpenDoor(speed);
+        }
+        collidingCount++; // 접촉하는 콜라이더의 수를 증가시킵니다.
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        collidingCount--; // 접촉하는 콜라이더의 수를 감소시킵니다.
+        if (collidingCount == 0) // 마지막 콜라이더가 벗어났을 때만 문을 닫습니다.
+        {
+            connectedDoor.CloseDoor(speed);
+        }
+    }
+}
